@@ -1,0 +1,178 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .wrap{
+           position:relative;
+           height:100vh;
+           user-select:none;
+       }
+       .item{
+           position: absolute;
+           left:100px;
+           top:100px;
+           text-align: center;
+           user-select: none;
+       }
+       .lineWrap{
+           position: absolute;
+           left:0;
+           top:0;
+       }
+    </style>
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="uikit.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="uikit.min.js"></script>
+    <script src="uikit-icons.min.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <!-- svg放在最上头，使其置于最下层 -->
+        <svg>
+            <defs>
+                <marker id="arrow" markerUnits="strokeWidth" markerWidth="13" markerHeight="13" viewBox="0 0 12 12"
+                    refX="6" refY="6" orient="auto">
+                    <path xmlns="http://www.w3.org/2000/svg" d="M2,2 L10,6 L2,10 L6,6 L2,2" style="fill: rgb(102, 102, 102);" />
+                </marker>
+            </defs>
+        </svg>
+        <svg class="lineWrap">
+            <polyline id="ployline1" fill="none" stroke="rgb(102, 102, 102)" stroke-width="1" stroke-dasharray="5,5"
+                marker-end="url(#arrow)" />
+            <polyline id="ployline2" fill="none" stroke="rgb(102, 102, 102)" stroke-width="1" stroke-dasharray="5,5"
+                marker-end="url(#arrow)" />
+        </svg>
+
+        <div id="component3" uk-tooltip="title: SQL查询; delay: 500;pos:top" class="item item3 uk-width-small uk-background-muted uk-drag uk-box-shadow-large uk-box-shadow-hover-medium">
+            <div style="width:fit-content">
+                <span class="uk-label uk-label-success">3</span>
+            </div>
+            <div style="width:fit-content;margin-top: 10px;margin-bottom: 10px;margin-left: 55px;margin-right: 55px">
+                <i uk-icon="icon: move; ratio: 2"></i>
+            </div>
+            <div style="width:fit-content">
+                <span class="uk-label uk-label-danger">1</span>
+                <span class="uk-label uk-label-danger">2</span>
+            </div>
+        </div>
+        <div id="component2" uk-tooltip="title: 正则表达式匹配; delay: 500;pos:top" class="item item2 uk-width-small uk-background-muted uk-drag uk-box-shadow-large uk-box-shadow-hover-medium">
+            <div style="width:fit-content">
+                <span class="uk-label uk-label-success">2</span>
+            </div>
+            <div style="width:fit-content;margin-top: 10px;margin-bottom: 10px;margin-left: 55px;margin-right: 55px">
+                <i uk-icon="icon: move; ratio: 2"></i>
+            </div>
+            <div style="width:fit-content">
+                <span class="uk-label uk-label-danger">1</span>
+                <span class="uk-label uk-label-danger">2</span>
+            </div>
+        </div>
+        <div id="component1" uk-tooltip="title: 开始; delay: 500;pos:top" class="item item1 uk-width-small uk-background-muted uk-drag uk-box-shadow-large uk-box-shadow-hover-medium">
+            <div style="width:fit-content">
+                <span class="uk-label uk-label-success">1</span>
+            </div>
+            <div style="width:fit-content;margin-top: 10px;margin-bottom: 10px;margin-left: 55px;margin-right: 55px">
+                <i uk-icon="icon: move; ratio: 2"></i>
+            </div>
+            <div style="width:fit-content">
+                <span class="uk-label uk-label-danger">1</span>
+                <span class="uk-label uk-label-danger">2</span>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+<script type="text/javascript" src="jquery.js"></script>
+<script>
+    $(function () {
+        function getPos(pos1, pos2) {
+            var x1, y1, x2, y2;
+            x1 = pos1.left;
+            y1 = pos1.top + pos1.height;
+            y2 = pos2.top;
+            x2 = pos2.left;
+
+            return {
+                start: { x: x1, y: y1 },
+                end: { x: x2, y: y2 }
+            }
+        }
+
+        function getElCoordinate(dom) {
+            var t = dom.offsetTop;
+            var l = dom.offsetLeft;
+            var w = dom.offsetWidth;
+            var h = dom.offsetHeight;
+            dom = dom.offsetParent;
+            while (!$(dom).hasClass('wrap')) {
+                t += dom.offsetTop;
+                l += dom.offsetLeft;
+                dom = dom.offsetParent;
+            }; return {
+                top: t,
+                left: l,
+                width: w,
+                height: h
+            };
+        }
+
+        function move() {
+            var pos1 = getElCoordinate($('.item1')[0])
+            var pos2 = getElCoordinate($('.item2')[0])
+            var pos3 = getElCoordinate($('.item3')[0])
+            var start = getPos(pos1, pos2).start
+            var end = getPos(pos1, pos2).end
+            var start1 = getPos(pos1, pos3).start
+            var end3 = getPos(pos1, pos3).end
+            var pos1_offset = parseInt(start.y) + 20
+            var pos2_offset = parseInt(end.y) - 20
+
+            var pos1_offset2 = parseInt(start1.y) + 40
+            var pos3_offset = parseInt(end3.y) - 20
+            var offset_2 = parseInt(start1.x) + 33
+            $('#path').attr({ d: 'M20,20 L100,100' })
+            $('#ployline1').attr({ points: start.x + ',' + start.y + ' ' + start.x + ',' + pos1_offset + ' ' + (start.x + pos1.width + end.x) / 2 + ',' + pos1_offset + ' ' + (start.x + pos1.width + end.x) / 2 + ',' + pos2_offset + ' ' + end.x + ',' + pos2_offset + ' ' + end.x + ',' + end.y })
+            $('#ployline2').attr({ points: offset_2 + ',' + start1.y + ' ' + offset_2 + ',' + pos1_offset2 + ' ' + (start1.x + pos1.width + end3.x) / 2 + ',' + pos1_offset2 + ' ' + (start1.x + pos1.width + end3.x) / 2 + ',' + pos3_offset + ' ' + end3.x + ',' + pos3_offset + ' ' + end3.x + ',' + end3.y })
+        }
+
+        move()
+        drag($('.item'), move)
+
+        function drag(obj, callback) {
+            var dragEles = obj;
+            dragEles.each(function (index, dragEleDom) {
+                var _move = false;
+                var _x, _y;
+                var dragEle = $(dragEleDom)
+                dragEle.dblclick(function () {
+                    alert("设置" + dragEle.attr("id"))
+                }).mousedown(function (e) {
+                    _move = true;
+                    _x = e.pageX - parseInt(dragEle.css("left"));
+                    _y = e.pageY - parseInt(dragEle.css("top"));
+                });
+                $(document).mousemove(function (e) {
+                    if (_move) {
+                        var x = e.pageX - _x;
+                        var y = e.pageY - _y;
+                        dragEle.css({ top: y, left: x });
+                        if (callback) { callback() }
+                    }
+                }).mouseup(function () {
+                    _move = false;
+                    dragEle.fadeTo("fast", 1);
+                });
+            })
+
+        }
+    })
+</script>
+
+</html>
